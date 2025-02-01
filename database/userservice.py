@@ -22,7 +22,7 @@ def check_email(email):
         return False
     return True
 
-def registration(user_name, phone_number, email, password, birthday, city):
+def registration(user_name, phone_number, email, password, birthday=None, city=None):
     db = next(get_db())
     if not check_user_name(user_name):
         return "Пользователь с таким именем уже существует"
