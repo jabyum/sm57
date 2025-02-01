@@ -34,7 +34,7 @@ def registration(user_name, phone_number, email, password, birthday=None, city=N
                     email=email, city=city, password=password, birthday=birthday)
     db.add(new_user)
     db.commit()
-    return True
+    return new_user.id
 def login(identificator, password):
     with next(get_db()) as db:
         user = db.query(User).filter_by(
