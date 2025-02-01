@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
 class User(Base):
-    __tablename__ = 'Users'
-    user_id = Column(Integer, primary_key=True, autoincrement=True)
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, unique=True)
     phone_number = Column(String, unique=True)
     email = Column(String, unique=True)
@@ -16,16 +16,18 @@ class User(Base):
     posts_fk = relationship("Post", back_populates="user_fk")
 
 class Hashtags(Base):
-    __tablename__ = 'Hashtags'
-    hashtags_id = Column(Integer, primary_key=True)
+    __tablename__ = 'hashtags'
+    id = Column(Integer, primary_key=True, autoincrement=True)
     hashtag = Column(String, unique=True, nullable=False)
 
 class Photo(Base):
-    __tablename__ = 'Photos'
-    photo_id = Column(Integer, primary_key=True, autoincrement=True)
+    __tablename__ = 'photos'
+    id = Column(Integer, primary_key=True, autoincrement=True)
     photo_path = Column(String, nullable=False)
-    profile_photo = Column(Integer, ForeignKey('Users.user_id'), nullable=True)
+    profile_photo = Column(Integer, ForeignKey('users.id'), nullable=True)
     post_photo = Column(Integer, ForeignKey('posts.id'), nullable=True)
+    users_fk = relationship(User, lazy="subquery")
+    post_fk = relationship("Post", lazy="subquery")
 class Post(Base):
     __tablename__ = "posts"
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -33,7 +35,7 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     hashtag_id = Column(String, ForeignKey("hashtags.id"), nullable=True)
     post_date = Column(DateTime, default=datetime.now())
-    user_fk = relationship(User, lazy="subquery",back_populates="post_fk" ,cascade="all, delete", passive_deletes=True)
+    user_fk = relationship(User, lazy="subquery",back_populates="posts_fk" ,cascade="all, delete", passive_deletes=True)
     hashtag_fk = relationship(Hashtags, lazy="subquery")
 class Comment(Base):
     __tablename__ = "comments"

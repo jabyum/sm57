@@ -1,4 +1,4 @@
-from models import *
+from database.models import *
 from database import get_db
 from database import get_db
 from database.models import User
@@ -22,7 +22,7 @@ def check_email(email):
         return False
     return True
 
-def registration(user_name, phone_number, email, password, birthday=None, city=None):
+def registration_db(user_name, phone_number, email, password, birthday=None, city=None):
     db = next(get_db())
     if not check_user_name(user_name):
         return "Пользователь с таким именем уже существует"
@@ -35,7 +35,7 @@ def registration(user_name, phone_number, email, password, birthday=None, city=N
     db.add(new_user)
     db.commit()
     return new_user.id
-def login(identificator, password):
+def login_db(identificator, password):
     with next(get_db()) as db:
         user = db.query(User).filter_by(
             username = identificator).first()
